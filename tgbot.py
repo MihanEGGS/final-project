@@ -1,9 +1,7 @@
 
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
-import requests, random
-
-
+import requests, random,json
 # izveido bota pieslēgumu Telegram
 app = ApplicationBuilder().token("7112507583:AAGIDFfC-NsKjdeX_T1uj0_nOdvlps1oBas").build()
 # offers group members to join a game, after what person, who started the bot, chooses "Enough!"
@@ -34,6 +32,7 @@ async def join(update: Update, context: ContextTypes.DEFAULT_TYPE):
     pic_girl.close()
     pic_waiting_menu.close()
 
+
 # starts the game itself, sending upcoming matches to each player privately and randomly generating them. All
 async def enough(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global people_joined_list
@@ -41,19 +40,39 @@ async def enough(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if str(update.effective_user.username) == people_joined_list[0]:# checks, if the user typing enough is correct
         if len(people_joined_list) % 2 != 0:
             await update.message.reply_text("-------------------ONE PLAYER MORE OR LESS, PLEASE-------------------")
-        for i in range (len(people_joined_list)):
-            random_foe = random.randint(0,(len(people_joined_list)))
-            to_be_printed = ("Round"+str(i+1)+'\n')
-        await update.message.reply_text("-------------------WE ARE ABOUT TO START-------------------")  
-    else:# denies access to the wrong user
+        else:
+            to_be_printed = ""
+            intervals = ["8-15", "18-25","28-35", "38-45"]
+            letters = ["a","b","c","d"]
+            for i in range(len(intervals)):
+                to_be_printed = to_be_printed + "1. "+intervals[i]+" --- /"+letters[i]+'\n'
+            await update.message.reply_text("""-------------------WE ARE ABOUT TO START-------------------"""+'\n'+"Choose the interval of moves"+'\n'+to_be_printed)
+            questions = ["8-15", "18-25", "28-35", "38-45"]
+            global poll
+            poll = await context.bot.send_poll(
+                update.effective_chat.id,
+                "How are you?",
+                questions,
+                is_anonymous=False,
+                allows_multiple_answers=False,
+                open_period = -1
+            )
+    else:
         await update.message.reply_photo(pic_girl,"-------------------ACCESS DENIED-------------------")
     pic_girl.close()
+async def vote(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    parameters = []
+    a = update.effective_chat.id
+    parameters = await poll.stop_poll()
+    with open ("votes.json", "w") as file: 
+        json.dump(parameters['options'],file)
 async def debil(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("I hear: Andrey is gay")
 # savieno čata komandu ar funkciju
 app.add_handler(CommandHandler("start", start))
 app.add_handler(CommandHandler("join", join))
 app.add_handler(CommandHandler("enough", enough))
+app.add_handler(CommandHandler("vote", vote))
 app.add_handler(CommandHandler("debil", debil))
 # sāk bota darbību
 app.run_polling()
