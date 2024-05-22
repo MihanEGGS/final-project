@@ -63,6 +63,9 @@ async def vote(update: Update, context: ContextTypes.DEFAULT_TYPE):
         print(option.text, option.voter_count)
     await update.message.reply_text('https://t.me/shrikingkirill_bot'+'\n'+"Type /matches to recieve tournament bracket")
 async def matches(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    people_joined_chat_ids  = []
+    if effective.
+    people_joined_chat_ids.append
     global people_joined_list
     print(people_joined_list)
     to_be_printed = ""
