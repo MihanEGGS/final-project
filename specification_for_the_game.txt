@@ -1,25 +1,16 @@
-1) Бота можно добавить в группу
-2) Любой игрок может написать /start, в таком случае начнётся набор игроков
-3) Любой игрок может написать /join, чтобы присоедениться к игре, бот высветит картинку gamepic и список игроков
-4) Если кто-то попытается в одном чате к уже существуещему сеансу написать команду /start, программа откажет ему в действии и высветит картинку Fuck
-5) Тот, кто уже написал команду /join, при втором написании этой же команды получит отказ от бота в действии и картинку fuck
-6) Когда кол-во игроков есть 4 и не больше 20, тому, кто начал сессию, будет возможно написать команду /Enough
-7) Команда enough сработает только если колво присоеденившихся чётное, оповестит игроков о начале игры, предложит выбрать интервал  ход
-	-это произойдёт посредству голосования(poll), если кол-во голосов будет равноценным, то бот рандомно выберет кол-во интервалов
-8) предложит перейти в личный чат с ботом(/begin)
-	- в личном чате игроку бот высветит все предстоящие сеты с каждым игроком, и уже сыгранные будут помечены
-	ВАЖНО чтобы бот генерировал сетку таким образом, что на один раунд каждый игрок имел ровно одного соперника в сетке турнира
-	- предложит команду /ready, когда оба игрока в сете нажмут её, между ними начнётся игра
-		- Цель игры - получить как можно больше очков
-		- У игроков есть выбор: предать или сотрудничать
-				- если оба выбирают сотрудничать, каждый получает по три очка
-				- если один предает другого, один получает пять очков, другой - 0
-				- если оба предают друг-друга, каждый получает по одному очку 
-			- Первым для хода игрока бот выбирает случайно
-			- Первый игрок совершает выбор, второй его не видит, делает свой, после чего, игрокам начисляются очки за первый ход, и каждый видит действия другого игрока и очки друг друга
-			- Следующий ход начинает второй игрок, и заканчивает первый, после чего также начисляются очки
-			- Когда ходы кончаются, в личном чате высвечиваются очки и победитель
-9) Когда все игроки закончат, раунд первый подойдёт к концу, в чате группы высветится табло, где будут будут показаны игроки их очки за все раунды в убывающем порядке
-10) После этого начинается следующий раунд, где повторятся пункты 7 и 8
-11) После последнего раунда игра высветит победителя и ознаменует его победу
-
+1) Bot's name is shrieking_kirill_bot
+2) It is thought to implement so called "Trust Game" in telegram, in PvE mode
+3) Bot has several strategies to act, but the one, that must be is strategy "Tit for tat"
+4) The duel is taking place in private chat with player
+5) The game is being played directly through chat
+6) Rules are simple: a player and bot are playing against each other, they can either cooperate, or defect each other. 
+7) The game must have undefined number of rounds , so that player can choose the interval of rounds, from which bot randomly will pick a digit
+8) After the number of rounds was picked, the game begins, and the player makes first move through InlineKeyboard(two options, to cheat and to cooperate)
+9) The bot chooses strategy(for now the only available is tit for tat, where bot starts with coopearting , and then replicates the player's previous choice)
+10) After each pick, the points for players are being counted and printed in chat
+- if both players cooperate. both gain 3 points
+- if one defects other person, defecter gets 5 points, but second player gets nothing 
+- if both choose tp defect, each player gains 1 point
+11) When the game is over, bot sends the message "Game Over!"
+12) moves and points are being collected and then saved in JSON file for statistics
+Therefore, game should have /start for starting the game and choosing interval for picking round number, /rules for player to know the rules, /vote to tell bot, that interval was chosen and to start the game itself
