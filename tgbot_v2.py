@@ -7,12 +7,16 @@ bot_points = 0
 player_points = 0
 bots_choice = '1'
 player_previous_choice = None
+match_results = []
+game_results = {}
+people_joined_list = []
+i = 0
 app = ApplicationBuilder().token("7112507583:AAGIDFfC-NsKjdeX_T1uj0_nOdvlps1oBas").build()
 
 # Tit-for-tat strategy
 def tit_for_tat(player_choice, response):
-    global bot_points, player_points, bots_choice, player_previous_choice, intervals, repetitions
-
+    global bot_points, player_points, bots_choice, player_previous_choice, intervals, repetitions, i, people_joined_list
+    i += 1
     bots_choice = '1' if player_previous_choice in [None, '1'] else '2'  # If player's previous choice is '1' or None, bot cooperates, else bot cheats
 
     if player_choice == bots_choice and player_choice == '1':  # Both cooperate
@@ -27,26 +31,43 @@ def tit_for_tat(player_choice, response):
     elif player_choice != bots_choice and bots_choice == '2':  # Player cooperates, bot cheats
         bot_points += 5
         player_points += 0
-
+    match_each_move_statistics = {
+        'bots_choice': bots_choice,
+        'player_choice':player_choice,
+        'bot_points': bot_points,
+        'player_points':player_points
+    }
+    # game_results['game '+str(i)] = match_each_move_statistics
+    match_results.append(match_each_move_statistics)
     response = "Your score is " + str(player_points) + '\n' + "Bot's score is " + str(bot_points)
     player_previous_choice = player_choice
+    if (repetitions+1) == intervals:
+        with open ("match_results.json", "w") as file: 
+            json.dump(match_results, file)
+        i = 0
+        people_joined_list = []
     return response
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    global bot_points, player_points
-    bot_points = 0
-    player_points = 0
-    await update.message.reply_text("""-------------------WE ARE ABOUT TO START-------------------""")
-    intervals = ["8-15", "18-25", "28-35", "38-45"]
-    global poll
-    poll = await context.bot.send_poll(
-        update.effective_chat.id,
-        "Choose the interval of moves, and type /rules to get familiar with rules!",
-        intervals,
-        is_anonymous=False,
-        allows_multiple_answers=False,
-        open_period=-1
-    )
+    people_joined_list.append(str(update.effective_user.username))
+    try:
+        if people_joined_list[1] == str(update.effective_user.username):
+            await update.message.reply_text("You have already started ")
+    except:
+        global bot_points, player_points
+        bot_points = 0
+        player_points = 0
+        await update.message.reply_text("""-------------------WE ARE ABOUT TO START-------------------""")
+        intervals = ["8-15", "18-25", "28-35", "38-45"]
+        global poll
+        poll = await context.bot.send_poll(
+            update.effective_chat.id,
+            "Choose the interval of moves, and type /rules to get familiar with rules!",
+            intervals,
+            is_anonymous=False,
+            allows_multiple_answers=False,
+            open_period=-1
+        )
 
 async def rules(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("RULEEEEEEEEEEEEZ" + '\n' + "You are playing with bot, and in your first move you can either cooperate or cheat your bot opponent"
@@ -56,6 +77,10 @@ async def rules(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def vote(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
+        match_each_move_statistics = {}
+        i = 0
+        i += 1
+        game_results.update({'game'+str(i): match_each_move_statistics})
         global intervals, repetitions
         repetitions = 0
         completed_poll = await poll.stop_poll()

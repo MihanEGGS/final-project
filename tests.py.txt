@@ -1,0 +1,18 @@
+HAPPY PATHES:
+
+if user prompts /start, programm's outcome is --- WE ARE ABOUT TO START --- with the poll to choose interval sent
+if user promts /user, programm's outcome is "RUUUUUUULEZ"
+
+USE-CASES
+
+if user prompts /start, and then selects an option, typing /vote, the programm's outcome shall be "The chosen interval is{option}We now start playing, choose, wheether to cooperate or to cheat"
+if user prompts /vote, and then selecting cooperate, programm's outcome is Player's score = 3, and bot's score = 3
+if user prompts /vote, and then selecting cheat, programm's outcome is Player's score = 5, and bot's score = 5
+if user prompts /vote, and then on the second move after cooperating, cheates, programm's outcome is Player's score = 8, and bot's score = 3
+
+EDGE-CASES
+
+if user prompts /vote, without previous /start, programm's outcome is "Please, to start the game type /start"
+if user prompts /start twice one after another, programm's outcome is "You have already started"
+if user prompts /start, /vote, plays the game and then types /start again, programm's otcome is "--- WE ARE ABOUT TO START ---" with the poll to choose interval sent
+if user prompts /debil, programm's outcome is a secret function

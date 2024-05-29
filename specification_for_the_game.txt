@@ -1,3 +1,4 @@
+Nefunctional prasības
 1) Bot's name is shrieking_kirill_bot
 2) It is thought to implement so called "Trust Game" in telegram, in PvE mode
 3) Bot has several strategies to act, but the one, that must be is strategy "Tit for tat"
@@ -13,4 +14,5 @@
 - if both choose tp defect, each player gains 1 point
 11) When the game is over, bot sends the message "Game Over!"
 12) moves and points are being collected and then saved in JSON file for statistics
-Therefore, game should have /start for starting the game and choosing interval for picking round number, /rules for player to know the rules, /vote to tell bot, that interval was chosen and to start the game itself
+Functional prasības
+game should have /start for starting the game and choosing interval for picking round number, /rules for player to know the rules, /vote to tell bot, that interval was chosen and to start the game itself
