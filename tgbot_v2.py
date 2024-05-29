@@ -109,7 +109,7 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await game(query.message.chat_id, context)
 
 async def debil(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("I hear: Andrey is gay")
+    await update.message.reply_text("I hear:  "+update.effective_user.first_name+" sorry, tas sekretfunkcija bija najebalova  :(")
 
 app.add_handler(CommandHandler("start", start))
 app.add_handler(CommandHandler("vote", vote))
